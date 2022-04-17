@@ -41,6 +41,8 @@ Random.seed!(123)
     @test computed_mse["var"] == 0
     @test computed_mse["var2"] == 0
 
+    NCRegressionTests.test_mse(computed_mse, best_mse)
+
 end
 
 @testset "NCRegressionTests - Mismatch" begin
@@ -77,8 +79,8 @@ end
         ds_filename_reference = filenameB,
     )
 
-    @test computed_mse["var"] == 2.8633275236008583e+04
-    @test computed_mse["var2"] == 2.8633275236008583e+04
+    @test computed_mse["var"] ≈ 2.8633275236008583e+04
+    @test computed_mse["var2"] ≈ 2.8633275236008583e+04
 
     best_mse = OrderedCollections.OrderedDict("var" => 2.8633275236008583e+04, "var2" => 0, "no_key" => 1)
 
