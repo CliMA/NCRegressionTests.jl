@@ -27,6 +27,7 @@ end
         ds_filename_computed::String,
         ds_filename_reference::String,
         varname::Function = s -> s,
+        debug_print = false,
     )
 
 Returns a `Dict` of mean-squared errors between
@@ -42,18 +43,19 @@ function compute_mse(;
     ds_filename_computed::String,
     ds_filename_reference::String,
     varname::Function = s -> s,
+    debug_print = false,
 )
     @assert isfile(ds_filename_computed)
     @assert isfile(ds_filename_reference)
 
     computed_mse = NC.Dataset(ds_filename_computed, "r") do ds_computed
         NC.Dataset(ds_filename_reference, "r") do ds_reference
-            _compute_mse(job_name, best_mse, ds_computed, ds_reference, varname)
+            _compute_mse(job_name, best_mse, ds_computed, ds_reference, varname, debug_print)
         end
     end
 end
 
-function _compute_mse(job_name, best_mse, ds_computed, ds_reference, varname)
+function _compute_mse(job_name, best_mse, ds_computed, ds_reference, varname, debug_print)
 
     mse = OrderedCollections.OrderedDict()
     # Ensure z_tcc and fields are consistent lengths:
@@ -69,7 +71,9 @@ function _compute_mse(job_name, best_mse, ds_computed, ds_reference, varname)
 
     for (i, key) in enumerate(best_keys)
         str_key = varname(key)
-        @info "Computing mse for $key, $str_key"
+        if debug_print
+            @info "Computing mse for `$key`, `$str_key`"
+        end
         data_computed_arr = vec(get_nc_data(ds_computed, str_key))
         data_reference_arr = vec(get_nc_data(ds_reference, str_key))
 
@@ -110,7 +114,7 @@ function _compute_mse(job_name, best_mse, ds_computed, ds_reference, varname)
         (data, i, j) -> sufficient_mse(data[i, 4], data[i, 5]) && j == 6,
         PrettyTables.crayon"green bold",
     )
-    @info "Regression tables for $job_name"
+    @info "Regression tables for `$job_name`"
     PrettyTables.pretty_table(
         table_data;
         header,
@@ -138,7 +142,7 @@ function test_mse(computed_mse, best_mse)
         for key in keys(best_mse)
             mse_not_regressed = sufficient_mse(computed_mse[key], best_mse[key])
             if !mse_not_regressed
-                @info "Regression failed for $key. (computed | best) mse: $(computed_mse[key]) | $(best_mse[key])"
+                @info "Regression failed for `$key`. (computed | best) mse: `$(computed_mse[key])` | `$(best_mse[key])`"
             end
             @test mse_not_regressed
         end
