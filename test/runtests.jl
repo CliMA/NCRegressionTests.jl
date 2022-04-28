@@ -30,18 +30,18 @@ Random.seed!(123)
         v[:, :] = 2 * data
     end
 
-    best_mse = OrderedCollections.OrderedDict("var" => 0, "var2" => 0)
+    reference_mse = OrderedCollections.OrderedDict("var" => 0, "var2" => 0)
 
     computed_mse = NCRegressionTests.compute_mse(;
         job_name = "NCTest",
-        best_mse,
+        reference_mse,
         ds_filename_computed = filenameA,
         ds_filename_reference = filenameB,
     )
     @test computed_mse["var"] == 0
     @test computed_mse["var2"] == 0
 
-    NCRegressionTests.test_mse(computed_mse, best_mse)
+    NCRegressionTests.test_mse(computed_mse, reference_mse)
 
 end
 
@@ -70,11 +70,11 @@ end
         v[:, :] = 2 * data
     end
 
-    best_mse = OrderedCollections.OrderedDict("var" => 2.8633275236008583e+04, "var2" => 0)
+    reference_mse = OrderedCollections.OrderedDict("var" => 2.8633275236008583e+04, "var2" => 0)
 
     computed_mse = NCRegressionTests.compute_mse(;
         job_name = "NCTest",
-        best_mse,
+        reference_mse,
         ds_filename_computed = filenameA,
         ds_filename_reference = filenameB,
     )
@@ -82,12 +82,12 @@ end
     @test computed_mse["var"] ≈ 2.8633275236008583e+04
     @test computed_mse["var2"] ≈ 2.8633275236008583e+04
 
-    best_mse = OrderedCollections.OrderedDict("var" => 2.8633275236008583e+04, "var2" => 0, "no_key" => 1)
+    reference_mse = OrderedCollections.OrderedDict("var" => 2.8633275236008583e+04, "var2" => 0, "no_key" => 1)
 
     err = ErrorException("No key no_key for mse computation.")
     @test_throws err NCRegressionTests.compute_mse(;
         job_name = "NCTest",
-        best_mse,
+        reference_mse,
         ds_filename_computed = filenameA,
         ds_filename_reference = filenameB,
     )
