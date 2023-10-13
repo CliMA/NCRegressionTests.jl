@@ -1,7 +1,7 @@
 name = "NCRegressionTests"
 uuid = "1789bc09-29e6-4c93-9c75-fe2179693664"
 authors = ["CliMA Contributors <clima-software@caltech.edu>"]
-version = "0.2.1"
+version = "0.2.2"
 
 [deps]
 NCDatasets = "85f8d34a-cbdd-5861-8df4-14fed0d494ab"
