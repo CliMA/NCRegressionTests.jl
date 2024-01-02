@@ -6,7 +6,6 @@ A package for regression tests over NCDatasets.
 |---------------------:|:----------------------------------------------|
 | **GHA CI**           | [![gha ci][gha-ci-img]][gha-ci-url]           |
 | **Code Coverage**    | [![codecov][codecov-img]][codecov-url]        |
-| **Bors enabled**     | [![bors][bors-img]][bors-url]                 |
 
 [gha-ci-img]: https://github.com/CliMA/NCRegressionTests.jl/actions/workflows/ci.yml/badge.svg
 [gha-ci-url]: https://github.com/CliMA/NCRegressionTests.jl/actions/workflows/ci.yml
